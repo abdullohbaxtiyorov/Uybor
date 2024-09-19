@@ -1,4 +1,4 @@
 from django.db import models
-from django.db.models import ImageField
+from django.db.models import
 
-a = ImageField
+aaa

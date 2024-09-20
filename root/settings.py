@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'apps',
 
     'rest_framework',
-    'drf_spectacular'
+    'drf_spectacular',
 ]
 
 REST_FRAMEWORK = {

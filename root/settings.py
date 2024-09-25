@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-8dt(&i&7&t-c2#v2a(kq*s_@*pay*g5loy+s+e)93l1&zlgg^('
+SECRET_KEY = 'django-insecure-8dt(&i&7&t-c2#v2a(kq*s_@*pay*g5loy+s+e)93l1&g^('
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -45,13 +45,17 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
-    # YOUR SETTINGS
+
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny'
+    ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'P23',
-    'DESCRIPTION': 'P23_DRF',
+    'TITLE': 'Uy-bor',
+    'DESCRIPTION': 'Uy-bor.uz',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
@@ -143,4 +147,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6380/0',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+    }
+}
 

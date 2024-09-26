@@ -8,8 +8,9 @@ from apps.models import Advertisement
 class AdvertisementTypeFilter(FilterSet):
         property_type = ChoiceFilter(
             field_name='property_type',
-            choices = Advertisement.AdvertisementTypeChoices
+            choices = Advertisement.AdvertisementTypeChoices.choices
         )
+
 
 
 

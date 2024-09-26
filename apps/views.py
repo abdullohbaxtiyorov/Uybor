@@ -1,32 +1,42 @@
 from random import randint
+
 from django.core.cache import cache
-from django.shortcuts import render
 from drf_spectacular.utils import extend_schema
-from rest_framework.generics import ListCreateAPIView, GenericAPIView
+from rest_framework.generics import ListCreateAPIView, GenericAPIView, CreateAPIView
+from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from tutorial.quickstart.serializers import UserSerializer
-from apps.models import User, Advertisement, Image
-from apps.serializers import AdvertisementModelSerializer, PhoneNumberSerializer, VerifySerializer, ImageModelSerializer
+
+from apps.models import User, Advertisement, Image, Options
+from apps.serializers import AdvertisementModelSerializer, PhoneNumberSerializer, VerifySerializer, \
+    ImageModelSerializer, UserModelSerializer, OptionModelSerializer
 
 
 @extend_schema(tags=['Users'])
 class UserListCreateAPIView(ListCreateAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
-
+    serializer_class = UserModelSerializer
 
 
 @extend_schema(tags=['Advertisement'])
-class AdvertisementListCreateAPIView(ListCreateAPIView):
+class AdvertisementListCreateAPIView(CreateAPIView):
     queryset = Advertisement.objects.all()
     serializer_class = AdvertisementModelSerializer
+    parser_classes = [JSONParser]
+    print(serializer_class.data)
 
 
 @extend_schema(tags=['Advertisement'])
-class ImageListCreateAPIView(ListCreateAPIView):
+class OptionsListCreateAPIView(ListCreateAPIView):
+    queryset = Options.objects.all()
+    serializer_class = OptionModelSerializer
+
+
+@extend_schema(tags=['Advertisement'])
+class ImageCreateAPIView(CreateAPIView):
     queryset = Image.objects.all()
     serializer_class = ImageModelSerializer
+
 
 
 @extend_schema(tags=["Send_code"])
@@ -50,9 +60,9 @@ class SendCodeAPIView(GenericAPIView):
 @extend_schema(tags=["Send_code"])
 class VerifyCodeAPIView(GenericAPIView):
     serializer_class = VerifySerializer
-    permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response({"message": "OK"})
+

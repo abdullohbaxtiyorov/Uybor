@@ -1,10 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import FileExtensionValidator
-from django.db.models import CharField, TextChoices, ImageField, Model, ForeignKey, CASCADE, JSONField, DecimalField, \
+from django.db.models import CharField, TextChoices, ImageField, Model, ForeignKey, CASCADE, JSONField, \
     SmallIntegerField
 
 
-class User(Model):
+class User(AbstractUser):
     class UserChoices(TextChoices):
         PRIVATE_OWNER = 'private_owner', 'Private_Owner'
         ADMIN = 'admin', 'Admin'
@@ -32,8 +32,7 @@ class Advertisement(Model):
     advertisement = CharField(max_length=25, choices=AdvertisementTypeChoices.choices)
     estate_type = CharField(max_length=25, choices=EstateTypeChoices.choices)
     description = CharField(max_length=255, blank=True, null=True)
-    # phone_number = CharField(max_length=20, default=User.phone_number)
-    phone_number = CharField(max_length=20, unique=True)
+    phone_number = SmallIntegerField(max_length=20)
     facilities = JSONField(blank=True, null=True)
 
 

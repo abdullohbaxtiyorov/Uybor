@@ -30,19 +30,14 @@ class OptionModelSerializer(ModelSerializer):
 
 
 class AdvertisementModelSerializer(ModelSerializer):
-    options = OptionModelSerializer(many=True)
-    images = ImageModelSerializer(many=True)
-
     class Meta:
         model = Advertisement
         fields = '__all__'
+        extra_kwargs = {
+            'facilities': {'write_only': True},
+        }
 
-    def to_representation(self, instance):
-        repr = super().to_representation(instance)
-        repr['options'] = OptionModelSerializer(instance.options.all(), many=True).data
-        repr['images'] = ImageModelSerializer(instance.images.all(), many=True).data
 
-        return repr
 
 
 class PhoneNumberSerializer(Serializer):

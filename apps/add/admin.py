@@ -1,8 +1,7 @@
-from django.contrib import admin
 from django.contrib.admin import register, ModelAdmin
 
-from apps.models import User, Advertisement
-
+from apps.add.models import Advertisement
+from apps.user.models import User
 
 @register(User)
 class UserAdmin(ModelAdmin):

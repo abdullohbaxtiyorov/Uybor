@@ -1,21 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import FileExtensionValidator
 from django.db.models import CharField, TextChoices, ImageField, Model, ForeignKey, CASCADE, JSONField, \
-    SmallIntegerField
+    SmallIntegerField, ManyToManyField
 
 
-class User(AbstractUser):
-    class UserChoices(TextChoices):
-        PRIVATE_OWNER = 'private_owner', 'Private_Owner'
-        ADMIN = 'admin', 'Admin'
-        REALTOR = 'realtor', 'Realtor'
-        DEVELOPER = 'developer', 'Developer'
 
-    first_name = CharField(max_length=255, blank=True, null=True)
-    last_name = CharField(max_length=255, blank=True, null=True)
-    phone_number = CharField(max_length=20, unique=True)
-    user_type = CharField(choices=UserChoices.choices, max_length=20, default=UserChoices.PRIVATE_OWNER)
-    photo = ImageField(upload_to='photos/users', blank=True, null=True)
 
 
 class Advertisement(Model):
@@ -29,22 +18,17 @@ class Advertisement(Model):
         FOR_BUSINESS = 'business', 'Business'
         LAND = 'land', 'Land'
 
-    advertisement = CharField(max_length=25, choices=AdvertisementTypeChoices.choices)
+    advertisement_type = CharField(max_length=25, choices=AdvertisementTypeChoices.choices)
     estate_type = CharField(max_length=25, choices=EstateTypeChoices.choices)
     description = CharField(max_length=255, blank=True, null=True)
-    phone_number = SmallIntegerField(max_length=20)
+    phone_number = SmallIntegerField()
     facilities = JSONField(blank=True, null=True)
-
-
-class Image(Model):
-    advertisement = ForeignKey('apps.Advertisement', on_delete=CASCADE, related_name='images')
-    image = ImageField(upload_to='images',
-                       validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg'])])
-
+    images = ManyToManyField('Image', related_name='advertisements', blank=True)
+    options = ForeignKey('Options', CASCADE, related_name='advertisements')
+    owner = ForeignKey('user.User', CASCADE)
 
 class Options(Model):
-    advertisement = ForeignKey('apps.Advertisement', on_delete=CASCADE, related_name='options')
-    number_rooms = SmallIntegerField(default=0,null=True,blank=True)
+    number_rooms = SmallIntegerField(default=0, null=True, blank=True)
     apartment_area = SmallIntegerField(blank=True, null=True)
     floor = SmallIntegerField(null=True, blank=True)
     floors_building = SmallIntegerField(null=True, blank=True)
@@ -55,6 +39,16 @@ class Options(Model):
     floors_house = SmallIntegerField(null=True, blank=True)
     office_area = SmallIntegerField(null=True, blank=True)
 
+class Image(Model):
+    image = ImageField(upload_to='images', validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg'])])
+
+
+
+
+
+
+
+
 
 
 # class Price(Model):
@@ -62,7 +56,7 @@ class Options(Model):
 #         YEVRO = 'yevro', 'Yevro'
 #         SOM = 'som', 'Som'
 #
-#     advertisement_id = ForeignKey('apps.Advertisement', CASCADE, related_name='prices')
+#     advertisement_id = ForeignKey('add.Advertisement', CASCADE, related_name='prices')
 #     price = DecimalField(max_digits=10, decimal_places=2)
 #     price_type = CharField(max_length=25, choices=PriceChoices.choices)
 

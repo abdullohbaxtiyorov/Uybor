@@ -2,7 +2,7 @@ from unittest.mock import PropertyMock
 
 from django_filters import FilterSet, ChoiceFilter
 
-from apps.models import Advertisement
+from apps.add.models import Advertisement
 
 
 class AdvertisementTypeFilter(FilterSet):

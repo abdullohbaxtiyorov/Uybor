@@ -25,7 +25,10 @@ class AdvertisementListCreateAPIView(CreateAPIView):
 @extend_schema(tags=['Advertisement'])
 class OptionsListCreateAPIView(ListCreateAPIView):
     queryset = Options.objects.all()
-    serializer_class = OptionModelSerializer
+    serializer_class = (OptionModelSerializer)
+
+
+
 
 
 

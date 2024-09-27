@@ -17,3 +17,8 @@ urlpatterns = [
     path('verify/', VerifyPhone.as_view(), name='verify'),
 
 ]
+
+
+# adVSDVS:FJKN?>rGANEBO;NDF/OBGDNF;GL
+
+# zxcvzxbxcvxxzcbxbvdsdsvjsjvsjodv

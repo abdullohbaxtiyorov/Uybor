@@ -7,6 +7,7 @@ from rest_framework.generics import ListCreateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from twilio.rest import Client
 
 from apps.add.serializers import UserModelSerializer, AdvertisementModelSerializer
@@ -84,3 +85,10 @@ class MyAddListApiView(ListAPIView):
 
     def get_queryset(self):
         return Advertisement.objects.filter(user=self.request.owner)
+
+@extend_schema(tags=['MyProfile'])
+class MyProfileModelViewSet(ModelViewSet):
+    serializer_class = UserModelSerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id)

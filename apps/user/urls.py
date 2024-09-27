@@ -2,8 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from .views import MyAddListApiView
-from .views import RegisterUser, VerifyPhone, UserListCreateAPIView
-from ..add.views import MyProfileModelViewSet
+from .views import RegisterUser, VerifyPhone, UserListCreateAPIView, MyProfileModelViewSet
 
 router = DefaultRouter()
 router.register(r'myadds', MyAddListApiView)

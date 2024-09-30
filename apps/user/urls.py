@@ -5,8 +5,8 @@ from .views import MyAddListApiView
 from .views import RegisterUser, VerifyPhone, UserListCreateAPIView, MyProfileModelViewSet
 
 router = DefaultRouter()
-router.register(r'myadds', MyAddListApiView)
-router.register(r'myprofile', MyProfileModelViewSet)
+router.register(r'my-adds', MyAddListApiView, basename='my-adds')
+router.register(r'my-profile', MyProfileModelViewSet, basename='my-profile')
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -18,7 +18,3 @@ urlpatterns = [
 
 ]
 
-
-# adVSDVS:FJKN?>rGANEBO;NDF/OBGDNF;GL
-
-# zxcvzxbxcvxxzcbxbvdsdsvjsjvsjodv

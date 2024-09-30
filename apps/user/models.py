@@ -1,21 +1,45 @@
 from django.contrib.auth.models import AbstractUser
 from django.db.models import TextChoices, CharField, ImageField, BooleanField
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.db import models
+
+from django.core.validators import RegexValidator
+from django.utils.translation import gettext_lazy as _
+
+
+class UserManager(BaseUserManager):
+    def create_user(self, phone_number, password=None, **extra_fields):
+        if not phone_number:
+            raise ValueError('The Phone Number must be set')
+        user = self.model(phone_number=phone_number, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, phone_number, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        return self.create_user(phone_number, password, **extra_fields)
 
 
 class User(AbstractUser):
     class UserChoices(TextChoices):
-        PRIVATE_OWNER = 'private_owner', 'Private Owner'
-        ADMIN = 'admin', 'Admin'
-        REALTOR = 'realtor', 'Realtor'
-        DEVELOPER = 'developer', 'Developer'
+        PRIVATE_OWNER = 'private_owner', _('Private Owner')
+        ADMIN = 'admin', _('Admin')
+        REALTOR = 'realtor', _('Realtor')
+        DEVELOPER = 'developer', _('Developer')
 
-    first_name = CharField(max_length=255, blank=True, null=True)
-    last_name = CharField(max_length=255, blank=True, null=True)
-    phone_number = CharField(max_length=20, unique=True)
-    user_type = CharField(choices=UserChoices.choices, max_length=20, default=UserChoices.PRIVATE_OWNER)
-    photo = ImageField(upload_to='photos/users', blank=True, null=True)
-    is_phone_verified = BooleanField(default=False)
+    # Validators can be adjusted according to your requirements
+    phone_validator = RegexValidator(regex=r'^\+?1?\d{9,15}$',
+                                     message="Phone number must be in the format: '+999999999'. Up to 15 digits allowed.")
+
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
+    phone_number = models.CharField(max_length=20, unique=True, validators=[phone_validator])
+    user_type = models.CharField(choices=UserChoices.choices, max_length=20, default=UserChoices.PRIVATE_OWNER)
+    photo = models.ImageField(upload_to='photos/users', blank=True, null=True)
+    is_phone_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.phone_number
-

@@ -17,8 +17,8 @@ class RegisterUserSerializer(Serializer):
     phone_number = IntegerField(help_text='Phone number')
 
 class VerifySerializer(Serializer):
-    phone_number = CharField(max_length=11)
-    code = CharField(max_length=8)
+    phone_number = IntegerField(help_text='Phone number')
+    code = IntegerField()
 
     def validate(self, attrs):
         phone_number = attrs.get('phone_number')
@@ -27,5 +27,4 @@ class VerifySerializer(Serializer):
         if code != cache_code:
             raise ValidationError({'code': 'Code not found or timed out'})
         return attrs
-
 

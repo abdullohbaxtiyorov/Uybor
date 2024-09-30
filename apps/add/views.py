@@ -3,7 +3,9 @@ from rest_framework.generics import ListCreateAPIView, CreateAPIView
 from rest_framework.parsers import JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 
+from apps.add.filters import AdvertisementTypeFilter
 from apps.add.models import Advertisement, Options
+from apps.add.pagination import LargeResultsSetPagination
 from apps.add.serializers import AdvertisementModelSerializer, \
     OptionModelSerializer
 
@@ -20,6 +22,9 @@ class AdvertisementListCreateAPIView(CreateAPIView):
     serializer_class = AdvertisementModelSerializer
     parser_classes = [MultiPartParser, JSONParser]
     permission_classes = [IsAuthenticated]
+    filterset_class = AdvertisementTypeFilter
+    pagination_class = LargeResultsSetPagination
+
 
 
 @extend_schema(tags=['Advertisement'])

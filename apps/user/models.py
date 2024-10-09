@@ -40,6 +40,12 @@ class User(AbstractUser):
     user_type = models.CharField(choices=UserChoices.choices, max_length=20, default=UserChoices.PRIVATE_OWNER)
     photo = models.ImageField(upload_to='photos/users', blank=True, null=True)
     is_phone_verified = models.BooleanField(default=False)
+    username = models.CharField(
+        max_length=150,
+        unique=True,
+        null=True,
+    )
+    password = CharField(_("password"), max_length=128, null=True)
 
     def __str__(self):
         return self.phone_number

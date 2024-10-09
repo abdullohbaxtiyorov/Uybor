@@ -4,9 +4,6 @@ from django.db.models import CharField, TextChoices, ImageField, Model, ForeignK
     SmallIntegerField, ManyToManyField
 
 
-
-
-
 class Advertisement(Model):
     class AdvertisementTypeChoices(TextChoices):
         SELL = 'sell', 'Sell'
@@ -25,7 +22,8 @@ class Advertisement(Model):
     facilities = JSONField(blank=True, null=True)
     images = ManyToManyField('Image', related_name='advertisements', blank=True)
     options = ForeignKey('Options', CASCADE, related_name='advertisements')
-    owner = ForeignKey('user.User', CASCADE)
+    user = ForeignKey('user.User', CASCADE)
+
 
 class Options(Model):
     number_rooms = SmallIntegerField(default=0, null=True, blank=True)
@@ -39,27 +37,12 @@ class Options(Model):
     floors_house = SmallIntegerField(null=True, blank=True)
     office_area = SmallIntegerField(null=True, blank=True)
 
+
+
+
+
 class Image(Model):
-    image = ImageField(upload_to='images', validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg'])])
+    image = ImageField(upload_to='images',
+                       validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg'])])
 
 
-
-
-
-
-
-
-
-
-# class Price(Model):
-#     class PriceChoices(TextChoices):
-#         YEVRO = 'yevro', 'Yevro'
-#         SOM = 'som', 'Som'
-#
-#     advertisement_id = ForeignKey('add.Advertisement', CASCADE, related_name='prices')
-#     price = DecimalField(max_digits=10, decimal_places=2)
-#     price_type = CharField(max_length=25, choices=PriceChoices.choices)
-
-
-class SiteSettings(Model):
-    pass

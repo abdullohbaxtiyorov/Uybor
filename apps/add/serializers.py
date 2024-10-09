@@ -1,7 +1,5 @@
-from django.core.cache import cache
-from rest_framework.exceptions import ValidationError
-from rest_framework.fields import IntegerField, CharField, ListField, ImageField
-from rest_framework.serializers import ModelSerializer, Serializer
+from rest_framework.fields import ListField, ImageField
+from rest_framework.serializers import ModelSerializer
 
 from apps.add.models import Advertisement, Image, Options
 from apps.user.models import User
@@ -11,9 +9,6 @@ class UserModelSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
-
-
-
 
 
 class OptionModelSerializer(ModelSerializer):
@@ -42,16 +37,10 @@ class AdvertisementModelSerializer(ModelSerializer):
     def create(self, validated_data):
         options_data = validated_data.pop('options')
         images_data = validated_data.pop('images')
-
         advertisement = Advertisement.objects.create(**validated_data)
-
-        # Optionsni saqlaymiz
         options_instance = Options.objects.create(advertisement=advertisement, **options_data)
-
-        # Rasmlarni saqlaymiz
         for image_data in images_data:
             Image.objects.create(advertisement=advertisement, image=image_data)
-
         return advertisement
 
     def to_representation(self, instance):
@@ -59,5 +48,4 @@ class AdvertisementModelSerializer(ModelSerializer):
         repr['images'] = ImageModelSerializer(instance.images.all(), many=True).data
         repr['options'] = OptionModelSerializer(instance.options).data
         return repr
-
-
+# asddassdasdasdsd

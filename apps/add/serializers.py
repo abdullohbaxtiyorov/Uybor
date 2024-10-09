@@ -48,4 +48,3 @@ class AdvertisementModelSerializer(ModelSerializer):
         repr['images'] = ImageModelSerializer(instance.images.all(), many=True).data
         repr['options'] = OptionModelSerializer(instance.options).data
         return repr
-# asddassdasdasdsd
